@@ -147,7 +147,7 @@ TARGET_RECOVERY_LCD_BACKLIGHT_PATH := \"/sys/class/leds/lcd-backlight/brightness
 #TWRP
 DEVICE_RESOLUTION := 1080x1920
 #TW_THEME := portrait_hdpi
-RECOVERY_VARIANT := twrp
+#RECOVERY_VARIANT := twrp
 TW_USE_TOOLBOX := true
 TW_EXTRA_LANGUAGES := true
 TW_DEFAULT_LANGUAGE := zh_CN
