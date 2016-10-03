@@ -24,7 +24,7 @@
 
 #define BLUETOOTH_QTI_SW TRUE
 
-#define BTM_DEF_LOCAL_NAME   "Xiaomi MI3W"
+#define BTM_DEF_LOCAL_NAME   "Sharp 303sh"
 // Enables Interleave scan
 #define BTA_HOST_INTERLEAVE_SEARCH  TRUE
 #define MAX_L2CAP_CHANNELS    14

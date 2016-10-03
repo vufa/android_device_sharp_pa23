@@ -172,7 +172,7 @@ Value * VerifyBasebandFn(const char *name, State *state, int argc, Expr *argv[])
 
         /**
          * @param count is hardcoded to 11 to check "MPSS.DI.?.0" value only
-         *   because xiaomi changes the other 8 chars every weekly update
+         *   because sharp changes the other 8 chars every weekly update
          *   and we just need a MPSS.DI.4.0 baseband
          */
         if (strncmp(baseband_version, current_baseband_version, 11) == 0) {

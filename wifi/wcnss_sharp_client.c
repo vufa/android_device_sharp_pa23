@@ -16,7 +16,7 @@
 
 //#define LOG_NDEBUG 0
 
-#define LOG_TAG "wcnss_xiaomi"
+#define LOG_TAG "wcnss_sharp"
 
 #define MAC_ADDR_SIZE 6
 
