@@ -1,0 +1,11 @@
+key 158   BACK              VIRTUAL
+key 139   MENU              VIRTUAL
+key 217   SEARCH            VIRTUAL
+key 102   HOME              WAKE VIRTUAL
+key 172   HOME              WAKE VIRTUAL
+key 115   VOLUME_UP         VIRTUAL
+key 114   VOLUME_DOWN       VIRTUAL
+key 212   CAMERA            VIRTUAL
+key 250   FOCUS             VIRTUAL
+key 116   POWER             WAKE
+key 198   POWER             WAKE

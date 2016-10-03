@@ -1,0 +1,394 @@
+# Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+# SHARP_EXTEND fuvking stuff add start
+#import init.sbm303sh.usb.rc
+# import init.sharp.extend.rc
+# SHARP_EXTEND fuvking stuff add end
+
+on early-init
+     mkdir /firmware 0771 system system
+# SHARP_EXTEND filesystem 2013/06/13 emmc mount start
+#     symlink /data/tombstones /tombstones
+     mkdir /tombstones 0771 system system
+#    mkdir /durable 0700 root root
+#    mkdir /diagapp
+#    mkdir /dmac
+# SHARP_EXTEND filesystem 2013/06/13 emmc mount end
+# SHARP_EXTEND fota 2013/05/22 add start
+#    mkdir /fota
+# SHARP_EXTEND fota 2013/05/22 add end
+
+on init
+#    export BOOTCLASSPATH ${BOOTCLASSPATH}:/system/framework/oem-services.jar:/system/framework/WfdCommon.jar
+# SHARP_EXTEND filesystem add 2013/09/13 start
+    rm /storage/sdcard0
+    mkdir /storage/sdcard0 0000 system system
+    export EXTERNAL_STORAGE /storage/sdcard0
+    # Support Sdcard paths
+    rmdir /storage/sdcard1
+    rmdir /storage/emulated/legacy
+    rm /sdcard
+    rm /mnt/sdcard
+    symlink /storage/sdcard0 /sdcard
+    symlink /storage/sdcard0 /mnt/sdcard
+    symlink /storage/sdcard0 /mnt/shell/emulated/0
+    symlink /storage/sdcard0 /storage/emulated/legacy
+# SHARP_EXTEND filesystem add 2013/09/13 end
+# SHARP_EXTEND filesystem 2013/05/31 add start
+    export REMOVABLE_STORAGE_PATH /storage/sdcard0
+# SHARP_EXTEND filesystem 2013/05/31 add end
+    # Set the property to indicate type of virtual display to 0
+    # 0 indicates that virtual display is not a Wifi display and that the
+    # session is not exercised through RemoteDisplay in the android framework
+    setprop persist.sys.wfd.virtual 0
+
+# SHARP_EXTEND filesystem add 2013/10/21 start
+  # set ro.crypto.state to unsupported before mount /data
+  setprop ro.crypto.state unsupported
+# SHARP_EXTEND filesystem add 2013/10/21 end
+
+# import cne init file
+on post-fs
+    export LD_PRELOAD /vendor/lib/libNimsWrap.so
+
+on fs
+    mount_all fstab.qcom
+
+    # Keeping following partitions outside fstab file. As user may not have
+    # these partition flashed on the device. Failure to mount any partition in fstab file
+    # results in failure to launch late-start class.
+
+    wait /dev/block/platform/msm_sdcc.1/by-name/cache
+# SHARP_EXTEND filesystem 2013/06/13 emmc mount start
+     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache nosuid nodev barrier=1
+#    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache noatime nosuid nodev barrier=1,noauto_da_alloc
+# SHARP_EXTEND filesystem 2013/06/13 emmc mount end
+
+    wait /dev/block/platform/msm_sdcc.1/by-name/persist
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
+
+    wait /dev/block/platform/msm_sdcc.1/by-name/modem
+    mount vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
+    write /sys/kernel/boot_adsp/boot 1
+
+# SHARP_EXTEND fota 2013/05/22 add start
+#   wait /dev/block/platform/msm_sdcc.1/by-name/fotadata
+#   mount vfat /dev/block/platform/msm_sdcc.1/by-name/fotadata /fota nosuid nodev fmask=0007,dmask=0007,gid=4011,uid=4011
+# SHARP_EXTEND fota 2013/05/22 add end
+
+# SHARP_EXTEND filesystem 2013/06/13 emmc mount start
+#    wait /dev/block/platform/msm_sdcc.1/by-name/durable
+#    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/durable /durable nosuid nodev barrier=1
+
+    wait /dev/block/platform/msm_sdcc.1/by-name/tombstones
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/tombstones /tombstones nosuid nodev barrier=1
+
+#    wait /dev/block/platform/msm_sdcc.1/by-name/diagapp
+#    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/diagapp /diagapp nosuid nodev barrier=1
+
+#    wait /dev/block/platform/msm_sdcc.1/by-name/dmac
+#    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/dmac /dmac nosuid nodev barrier=1
+
+#    symlink /diagapp /data/diagapp
+# SHARP_EXTEND filesystem 2013/06/13 emmc mount end
+
+# SHARP_EXTEND fota 2013/09/30 add start
+#    mkdir /data/fota_sharp 0770 root fota
+# SHARP_EXTEND fota 2013/09/30 add End
+
+# SHARP_EXTEND filesystem internal_sd userdata share 2013/08/19 mod start
+    setprop ro.crypto.fuse_sdcard false
+# SHARP_EXTEND filesystem internal_sd userdata share 2013/08/19 mod end
+
+# SHARP_EXTEND self_check 2013/8/23 add start
+#   chown self_check self_check /diagapp
+#   chmod 0770 /diagapp
+#   mkdir /diagapp/selfchecklog
+#   chown self_check self_check /diagapp/selfchecklog
+#   chmod 0770 /diagapp/selfchecklog
+#   mkdir /diagapp/selfchecksum
+#   chown self_check self_check /diagapp/selfchecksum
+#   chmod 0770 /diagapp/selfchecksum
+# SHARP_EXTEND self_check 2013/8/23 add end
+
+# on early-boot
+## EmojiFactory implementation 2013.06.25 Add-Start
+##    setprop ro.config.libmotionemoji libmotionemoji_impl.so
+##    setprop motionemoji.defaultsize 54
+##    setprop ro.config.libemoji libemoji_sbm.so
+## EmojiFactory implementation Add-End
+
+on post-fs-data
+    mkdir /data/tombstones 0771 system system
+    mkdir /tombstones/modem 0771 system system
+    mkdir /tombstones/lpass 0771 system system
+    mkdir /tombstones/wcnss 0771 system system
+    mkdir /tombstones/dsps 0771 system system
+
+# SHARP_EXTEND phone directory. 2012/05/23 Add-Start
+#  mkdir /durable/phone 0751 radio radio
+# SHARP_EXTEND phone directory. 2012/05/23 Add-End
+
+# SHARP_EXTEND SHDISP 2013/08/27 add Start
+#    mkdir /durable/display 0700 root root
+# SHARP_EXTEND SHDISP 2013/08/27 add End
+
+# Allow usb charging to be disabled persistently
+on property:persist.usb.chgdisabled=1
+    write /sys/class/power_supply/battery/charging_enabled 0
+
+on property:persist.usb.chgdisabled=0
+    write /sys/class/power_supply/battery/charging_enabled 1
+
+#start camera server as daemon
+service qcamerasvr /system/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input graphics
+
+#start GNSS/Sensor interface daemon
+# SHARP_EXTEND invalidate ISAGNAV 2013/07/08 delete Start
+#service gsiff_daemon /system/bin/gsiff_daemon
+#    class late_start
+#    user system
+#    group gps net_raw
+# SHARP_EXTEND invalidate ISAGNAV 2013/07/08 delete End
+
+service qrngd /system/bin/qrngd -f
+    class main
+    user root
+    group root
+
+service qrngp /system/bin/qrngp
+    class main
+    user root
+    group root
+    oneshot
+    disabled
+
+on property:sys.boot_completed=1
+    start qrngp
+
+service qseecomd /system/bin/qseecomd
+   class core
+   user root
+   group root
+
+service mpdecision /system/bin/mpdecision --avg_comp
+   user root
+   disabled
+
+service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
+   user system
+   group system
+   disabled
+
+# SHARP_EXTEND socket fota 2013/01/07 add start
+#service fotad /system/bin/fotad
+#    class main
+#    user root
+#    socket fota_daemon stream 660 root fota
+# SHARP_EXTEND socket fota 2013/01/07 add end
+
+service thermal-engine /system/bin/thermal-engine
+   class main
+   user root
+   group root
+#SHARP_EXTEND Thermal add start
+#   critical
+#SHARP_EXTEND Thermal add end
+
+service time_daemon /system/bin/time_daemon
+   class late_start
+   user root
+   group root
+
+# SHARP_EXTEND UIM 2013/7/2 add start
+service uim-daemon /system/bin/uimd
+    class late_start
+    user root
+    group radio
+    oneshot
+# SHARP_EXTEND UIM add end
+
+service audiod /system/bin/audiod
+   class late_start
+   user system
+   group system
+
+service usf_tester /system/bin/usf_tester
+    user system
+    group system inet
+    disabled
+
+service usf_epos /system/bin/usf_epos
+    user system
+    group system inet
+    disabled
+
+service usf_gesture /system/bin/usf_gesture
+    user system
+    group system inet
+    disabled
+
+service usf_p2p /system/bin/usf_p2p
+    user system
+    group system inet
+    disabled
+
+service usf_hovering /system/bin/usf_hovering
+    user system
+    group system inet
+    disabled
+
+service usf_proximity /system/bin/usf_proximity
+    user system
+    group system inet
+    disabled
+
+service usf-post-boot /system/bin/sh /system/etc/usf_post_boot.sh
+    class late_start
+    user root
+    disabled
+    oneshot
+
+on property:init.svc.bootanim=stopped
+    start usf-post-boot
+
+service imsqmidaemon /system/bin/imsqmidaemon
+    class main
+    user system
+    group radio net_raw log qcom_diag
+    disabled
+
+on boot
+    start imsqmidaemon
+# SHARP_EXTEND delete start
+#   insmod /system/lib/modules/adsprpc.ko
+# SHARP_EXTEND delete end
+
+# shmds add 13-1 S
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/accl_enable
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/accl_fifo_enable
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/accl_fs
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/compass_enable
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/compass_scale
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/dmp_firmware
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/dmp_int_on
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/dmp_on
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/dmp_output_rate
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/early_suspend_enable
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/enable
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/fifo_rate
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/firmware_loaded
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/flick_axis
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/flick_counter
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/flick_int_on
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/flick_lower
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/flick_message_on
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/flick_upper
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/gyro_enable
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/gyro_fifo_enable
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/gyro_fs
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/key
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/lpa_freq
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/lpa_mode
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/orientation_on
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_steps
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_time
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/power_state
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/tap_min_count
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/tap_on
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/tap_threshold
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/tap_time
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_clip_threshold
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_min_steps
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_max_step_buffer_time
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_threshold
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_min_up_time
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_max_up_time
+    chown system system /sys/devices/f9968000.i2c/i2c-12/12-0068/invensense/mpu/pedometer_min_energy
+# shmds add 13-1 E
+
+# SHARP_EXTEND exFAT kernel module support 2013/07/03 Add-Start
+    insmod /sbin/shexfat.ko
+# SHARP_EXTEND exFAT kernel module support 2013/07/03 Add-End
+
+# SHARP_EXTEND VMware add 2013/12/16 start
+    chown system system /sys/kernel/mnhelper/sender/value
+# VMware BEGIN
+# VMware MVP feature list (generated)
+    setprop ro.mvp.features grbks,vpncrt,vpn,mvpdsec,srvc,mvpdaff,ftx
+# VMware END
+# SHARP_EXTEND VMware add 2013/12/16 end
+
+# imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
+service imsdatadaemon /system/bin/imsdatadaemon
+    class main
+    user root
+    group radio net_raw log qcom_diag net_admin
+    disabled
+
+service wcnss-service /system/bin/wcnss_service
+    class late_start
+    user system
+    group system wifi
+    oneshot
+
+on property:sys.ims.QMI_DAEMON_STATUS=1
+    start imsdatadaemon
+
+service ims_rtp_daemon /system/bin/ims_rtp_daemon
+   class main
+   user system
+   group radio net_raw diag qcom_diag log
+   disabled
+
+# SHARP STUFF
+on property:sys.ims.DATA_DAEMON_STATUS=1
+    start ims_rtp_daemon
+
+#service fs_service /system/bin/FactorySettingsService
+#    class late_start
+#    group qcom_oncrpc
+
+#service chksum_service /system/bin/SumCalculateProcService
+#    disabled
+#    oneshot
+
+# SHARP_EXTEND VMware add 2013/12/16 start
+# VMware MVP Hypervisor daemon
+# DO NOT REMOVE THIS COMMENT MVP_FEATURE_srvc
+# DO NOT REMOVE THIS COMMENT MVP_FEATURE_mvpdaff
+service mvpd /system/bin/mvpd -F -a 14
+    class main
+    user root
+    disabled
+# SHARP_EXTEND VMware add 2013/12/16 end
