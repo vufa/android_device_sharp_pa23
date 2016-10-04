@@ -172,6 +172,9 @@ TARGET_PROVIDES_GPS_LOC_API := true
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
+#for zip
+BLOCK_BASED_OTA := true
+
 # Use HW crypto for ODE
 TARGET_HW_DISK_ENCRYPTION := false
 
