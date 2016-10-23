@@ -1,2 +1,0 @@
-#============= rild ==============
-allow rild zygote_exec:file execute;

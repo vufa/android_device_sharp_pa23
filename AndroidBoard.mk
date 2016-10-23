@@ -2,12 +2,11 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-ALL_PREBUILT += $(INSTALLED_KERNEL_TARGET)
+KERNEL_DEFCONFIG := pa23_defconfig
 
-#----------------------------------------------------------------------
-# extra images
-#----------------------------------------------------------------------
-include build/core/generate_extra_images.mk
+# Inherit from msm8974
+include device/qcom/msm8974/AndroidBoard.mk
 
-# include the non-open-source counterpart to this file
--include vendor/sharp/303sh/AndroidBoardVendor.mk
+# Include the non-open-source counterpart to this file
+-include vendor/sharp/PA23/AndroidBoardVendor.mk
+

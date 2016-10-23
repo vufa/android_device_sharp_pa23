@@ -1,0 +1,11 @@
+[
+  {
+    "repository": "android_device_qcom_common",
+    "target_path": "device/qcom/common"
+  ,}
+  {
+    "repository": "android_device_qcom_msm8974",
+    "target_path": "device/qcom/msm8974"
+  }
+
+]

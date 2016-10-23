@@ -1,5 +1,5 @@
 #
-# Copyright 2015 The Android Open Source Project
+# Copyright (C) 2012 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@
 # defined in envsetup.sh.
 #
 # In particular, you can add lunch options with the add_lunch_combo
-#function: add_lunch_combo generic-eng
+# function: add_lunch_combo generic-eng
 
-for var in eng user userdebug; do
-  add_lunch_combo mk_303sh-$var
-done
+add_lunch_combo PA23-eng
+add_lunch_combo PA23-userdebug
 

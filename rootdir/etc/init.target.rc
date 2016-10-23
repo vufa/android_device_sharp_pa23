@@ -1,0 +1,313 @@
+# Copyright (c) 2012, 2014, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+# SHARP_EXTEND usb add start
+import init.sharp.usb.rc
+# SHARP_EXTEND usb add end
+
+on early-init
+    mkdir /firmware 0771 system system
+    # SHARP_EXTEND filesystem mod start
+    # symlink /data/tombstones /tombstones
+    mkdir /tombstones 0771 system system
+    mkdir /durable 0700 root root
+    mkdir /diagapp
+    mkdir /dmac
+    mkdir /fota
+    mkdir /carrier 0750 root system
+    # SHARP_EXTEND filesystem mod end
+
+on init
+    # SHARP_EXTEND filesystem add start
+    # Support Sdcard paths
+    rm /sdcard
+    rm /mnt/sdcard
+    # Support legacy paths
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+    export REMOVABLE_STORAGE_PATH /storage/sdcard1
+    # SHARP_EXTEND filesystem add end
+
+    # SHARP_EXTEND filesystem add start
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    mkdir /storage/sdcard1 0700 root root
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+    export SECONDARY_STORAGE /storage/sdcard1
+    # SHARP_EXTEND filesystem add end
+
+on fs
+    mount_all fstab.qcom
+
+    # Keeping following partitions outside fstab file. As user may not have
+    # these partition flashed on the device. Failure to mount any partition in fstab file
+    # results in failure to launch late-start class.
+
+    # SHARP_EXTEND filesystem mod start
+    symlink /diagapp /data/diagapp
+
+    # wait /dev/block/platform/msm_sdcc.1/by-name/cache
+    # mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache nosuid nodev barrier=1
+
+    # wait /dev/block/platform/msm_sdcc.1/by-name/persist
+    # mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1
+
+    # wait /dev/block/platform/msm_sdcc.1/by-name/modem
+    # mount vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
+    # SHARP_EXTEND filesystem mod end
+
+    # SHARP_EXTEND fota 2013/05/22 add start
+    wait /dev/block/platform/msm_sdcc.1/by-name/fotadata
+    mount vfat /dev/block/platform/msm_sdcc.1/by-name/fotadata /fota nosuid nodev fmask=0007,dmask=0007,gid=4011,uid=4011
+    # SHARP_EXTEND fota 2013/05/22 add end
+
+    # SHARP_EXTEND SHDISP 2014/01/30 add start
+    mkdir /durable/display 0700 root root
+    # SHARP_EXTEND SHDISP 2014/01/30 add end
+
+    # SHARP_EXTEND for Record Hiddenmenu Life timer/Life Calls/Life Data Start
+    mkdir /durable/hiddenmenu 0700 radio system
+    # SHARP_EXTEND for Record Hiddenmenu Life timer/Life Calls/Life Data End
+
+    # SHARP_EXTEND SENSOR 2014/07/08 add start
+    mkdir /durable/sensor 0700 system system
+    mkdir /durable/sensor/proximity 0700 system system
+    # SHARP_EXTEND SENSOR 2014/07/08 add end
+
+    # SHARP_EXTEND filesystem chameleon mount-point add start
+    chown carrier system /carrier
+    chmod 0751 /carrier
+    # SHARP_EXTEND filesystem chameleon mount-point add end
+
+    # SHARP_EXTEND vold sd encrypt
+    mkdir /data/.voldsd 0700 root root
+
+    # SHARP_EXTEND filesystem internal_sd userdata share start
+    setprop ro.crypto.fuse_sdcard true
+    # SHARP_EXTEND filesystem internal_sd userdata share end
+
+    # SHARP_EXTEND self_check add start
+    chown self_check self_check /diagapp
+    chmod 0770 /diagapp
+    mkdir /diagapp/selfchecklog
+    chown self_check self_check /diagapp/selfchecklog
+    chmod 0770 /diagapp/selfchecklog
+    mkdir /diagapp/selfchecksum
+    chown self_check self_check /diagapp/selfchecksum
+    chmod 0770 /diagapp/selfchecksum
+    # SHARP_EXTEND self_check add end
+
+on post-fs-data
+    mkdir /data/tombstones 0771 system system
+    mkdir /tombstones/modem 0771 system system
+
+# import cne init file
+on post-fs
+    export LD_PRELOAD /vendor/lib/libNimsWrap.so
+
+on init
+    write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+
+on boot
+    insmod /system/lib/modules/adsprpc.ko
+    # Enable writing to led blink node from userspace
+    chown system system /sys/class/leds/red/blink
+    chown system system /sys/class/leds/green/blink
+    # Enable writing to brightness node under torch-light from userspace
+    chown system system /sys/class/leds/torch-light/brightness
+
+    #TS add AKM sensor
+    chown system system /sys/class/compass/akm8963/enable_acc
+    chown system system /sys/class/compass/akm8963/enable_mag
+    chown system system /sys/class/compass/akm8963/enable_fusion
+    chown system system /sys/class/compass/akm8963/delay_acc
+    chown system system /sys/class/compass/akm8963/delay_mag
+    chown system system /sys/class/compass/akm8963/delay_fusion
+    chown system system /sys/class/compass/akm8963/accel
+    chown system system /sys/devices/f9924000.i2c/i2c-2/2-0018/enable_device
+    chown system system /sys/devices/f9924000.i2c/i2c-2/2-0018/pollrate_ms
+
+# SHARP_EXTEND filesystem exFAT kernel module support Start
+    insmod /sbin/shexfat.ko
+# SHARP_EXTEND filesystem exFAT kernel module support End
+
+#Start the qcom-system-daemon service
+service qcomsysd /system/bin/qcom-system-daemon
+    class main
+
+#start camera server as daemon
+service qcamerasvr /system/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input graphics
+
+# Allow usb charging to be disabled persistently
+on property:persist.usb.chgdisabled=1
+   write /sys/class/power_supply/battery/charging_enabled 0
+
+on property:persist.usb.chgdisabled=0
+   write /sys/class/power_supply/battery/charging_enabled 1
+
+service time_daemon /system/bin/time_daemon
+   class late_start
+   user root
+   group root
+
+service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
+   user root
+   disabled
+
+#start GNSS/Sensor interface daemon
+# SHARP_EXTEND Disable SAP daemon SH-Custom No.5 DEL 2014.03.27 Start
+#service gsiff_daemon /system/bin/gsiff_daemon
+#   class late_start
+#   user system
+#   group gps net_raw
+# SHARP_EXTEND Disable SAP daemon SH-Custom No.5 DEL 2014.03.27 End
+
+# SHARP_EXTEND socket fota 2013/12/13 add start
+service fotad /system/bin/fotad
+   class main
+   user root
+   socket fota_daemon stream 660 root fota
+# SHARP_EXTEND socket fota 2013/12/13 add end
+
+service thermal-engine /system/bin/thermal-engine
+   class main
+   user root
+   group root
+#SHARP_EXTEND Thermal add start
+   critical
+#SHARP_EXTEND Thermal add end
+
+service qrngd /system/bin/qrngd -f
+    class main
+    user root
+    group root
+
+
+service qrngp /system/bin/qrngp
+    class main
+    user root
+    group root
+    oneshot
+    disabled
+
+on property:sys.boot_completed=1
+    start qrngp
+
+service qseecomd /system/bin/qseecomd
+    class late_start
+    user root
+    group root
+
+service audiod /system/bin/audiod
+   class late_start
+   user system
+   group system
+
+service adsprpcd /system/bin/adsprpcd
+   class main
+   user media
+   group media
+
+service imsqmidaemon /system/bin/imsqmidaemon
+    class main
+    user system
+    socket ims_qmid stream 0660 system radio
+    group ims radio net_raw log qcom_diag
+
+service imsdatadaemon /system/bin/imsdatadaemon
+    class main
+    user system
+    socket ims_datad stream 0660 system radio
+    group system ims wifi radio inet net_raw log qcom_diag net_admin
+    disabled
+
+on property:sys.ims.QMI_DAEMON_STATUS=1
+    start imsdatadaemon
+
+service ims_rtp_daemon /system/bin/ims_rtp_daemon
+   class main
+   user system
+   socket ims_rtpd stream 0660 system ims
+   group ims net_raw diag qcom_diag log
+   disabled
+
+on property:sys.ims.DATA_DAEMON_STATUS=1
+    start ims_rtp_daemon
+
+service wcnss-service /system/bin/wcnss_service
+   class late_start
+   user system
+   group system wifi
+   oneshot
+
+# SHARP_EXTEND LCD 2014/05/28 delete start
+#service ppd /system/bin/mm-pp-daemon
+#   class late_start
+#   user system
+#   socket pps stream 0660 system system
+#   group system graphics
+# SHARP_EXTEND LCD 2014/05/28 delete end
+
+on property:init.svc.surfaceflinger=stopped
+    stop ppd
+
+#TS add AKM sensor
+service akmd8963 /system/bin/akmd8963
+    class main
+    user root
+    group root
+
+service fs_service /system/bin/FactorySettingsService
+    class late_start
+    group qcom_oncrpc
+
+# SHARP_EXTEND filesystem mod start
+service sdcard /system/bin/sdcard -l /data/media /mnt/shell/emulated 1023 1023
+    class late_start
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+    class late_start
+    disabled
+
+on property:init.svc.sdcard=running
+    wait /mnt/shell/emulated/0
+    mount none /mnt/shell/emulated/0 /storage/emulated/legacy bind
+# SHARP_EXTEND filesystem mod end
+
+# SHARP_EXTEND selfcheck Add-Start
+service selfcheckserver /system/bin/selfcheckserver
+    class main
+    socket selfcheck_sock stream 660 root self_check
+    user root
+    group self_check
+# SHARP_EXTEND selfcheck Add-End
