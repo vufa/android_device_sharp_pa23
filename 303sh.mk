@@ -5,10 +5,12 @@ LOCAL_PATH := device/sharp/303sh
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
+LOCAL_KERNEL := $(LOCAL_PATH)/kernel
 LOCAL_DT := $(LOCAL_PATH)/dt.img
 
 PRODUCT_COPY_FILES += \
-   	$(LOCAL_DT):dt.img
+    $(LOCAL_KERNEL):kernel \
+	$(LOCAL_DT):dt.img
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \

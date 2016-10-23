@@ -50,18 +50,19 @@ TARGET_GLOBAL_CFLAGS   += -mfpu=neon -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 
 # Kernel
-BOARD_KERNEL_SEPARATED_DT := true
+#BOARD_KERNEL_SEPARATED_DT := true
 BOARD_KERNEL_CMDLINE               := androidboot.hardware=qcom user_debug=31 maxcpus=2 msm_rtb.filter=0x3F ehci-hcd.park=3
 BOARD_KERNEL_SEPARATED_DT          := true
 BOARD_KERNEL_BASE                  := 0x00000000
 BOARD_KERNEL_PAGESIZE              := 2048
 BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x02000000 --second_offset 0x00f00000 --tags_offset 0x01e00000
-TARGET_KERNEL_SOURCE               := kernel/sharp/msm8974
+#TARGET_KERNEL_SOURCE               := kernel/sharp/msm8974
 #TARGET_KERNEL_SOURCE               := kernel/sharp/303sh
 TARGET_KERNEL_ARCH                 := arm
-TARGET_KERNEL_CONFIG               := mokee_303sh_defconfig
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
-BOARD_DTBTOOL_ARGS                 := -2
+#TARGET_KERNEL_CONFIG               := mokee_303sh_defconfig
+#TARGET_KERNEL_CONFIG               := pa23_defconfig
+#TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
+#BOARD_DTBTOOL_ARGS                 := -2
 
 # Vendor Init
 TARGET_UNIFIED_DEVICE       := true
