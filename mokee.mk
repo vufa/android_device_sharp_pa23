@@ -23,14 +23,14 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, vendor/mk/config/common_full_phone.mk)
 
 # Inherit from 303sh device
-$(call inherit-product, device/sharp/303sh/303sh.mk)
+$(call inherit-product, device/sharp/PA23/PA23.mk)
 
 
-PRODUCT_NAME := mk_303sh
-PRODUCT_DEVICE := 303sh
+PRODUCT_NAME := mk_PA23
+PRODUCT_DEVICE := PA23
 PRODUCT_BRAND := SHARP
 PRODUCT_MANUFACTURER := SHARP
-PRODUCT_MODEL := 303sh
+PRODUCT_MODEL := PA23
 
 PRODUCT_GMS_CLIENTID_BASE := android-sharp
 
