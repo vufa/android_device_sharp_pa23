@@ -56,7 +56,11 @@ RECOVERY_GRAPHICS_USE_LINELENGTH := true
 TW_EXCLUDE_SUPERSU := true
 TW_NO_USB_STORAGE := true
 TW_NO_REBOOT_BOOTLOADER := true
+TW_TARGET_USES_QCOM_BSP := true
 
 #
 USE_CAMERA_STUB := true
+
+# Hack for building without kernel sources
+$(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
 
