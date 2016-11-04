@@ -1,0 +1,190 @@
+# ADSP
+#bin/adsprpcd
+vendor/lib/libadsprpc.so
+#vendor/lib/libfastcvadsp_stub.so
+vendor/lib/libfastcvopt.so
+lib/modules/adsp-loader.ko
+#vendor/lib/libscve.so
+#vendor/lib/libscve_stub.so
+
+#etc
+
+#usr
+
+#modules
+
+#ril
+vendor/lib/libril-qc-qmi-1.so
+vendor/lib/libril-qcril-hook-oem.so
+vendor/lib/libdsi_netctrl.so
+vendor/lib/libnetmgr.so
+lib/libbattlog.so
+
+#Modem
+bin/port-bridge
+bin/shrevk
+
+#display
+vendor/lib/egl/eglsubAndroid.so
+vendor/lib/egl/libEGL_adreno.so
+vendor/lib/egl/libGLESv1_CM_adreno.so
+vendor/lib/egl/libGLESv2_adreno.so
+vendor/lib/egl/libq3dtools_adreno.so
+vendor/lib/libadreno_utils.so
+vendor/lib/libC2D2.so
+vendor/lib/libc2d2_a3xx.so
+vendor/lib/libc2d2_z180.so
+vendor/lib/libCB.so
+vendor/lib/libgsl.so
+vendor/lib/libllvm-a3xx.so
+#vendor/lib/libllvm-arm.so
+vendor/lib/libOpenCL.so
+vendor/lib/libOpenVG.so
+vendor/lib/libsc-a2xx.so
+vendor/lib/libsc-a3xx.so
+#vendor/lib/libRSDriver_adreno.so
+
+#NFC
+
+#sensor
+
+#audio hw build
+#lib/hw/audio.a2dp.default.so
+#lib/hw/audio.primary.msm8960.so
+#lib/hw/audio_policy.msm8960.so
+#lib/libalsa-intf.so
+#lib/libaudioparameter.so
+
+#audio tool lib build
+#lib/libalsautils.so
+#lib/libaudioparsers.so
+#lib/libaudioutil.so
+
+#for TARGET_USES_QCOM_MM_AUDIO
+#lib/libaudioalsa.so
+
+#audio share lib must need
+#lib/libacdbloader.so
+#lib/libsurround_proc.so
+#lib/libaudcal.so
+#lib/libcsd-client.so
+
+#common
+
+#SHARP FVCKING STUFF
+bin/uimd
+bin/mvpd 
+
+# Graphics firmware
+etc/firmware/a225p5_pm4.fw
+etc/firmware/a225_pfp.fw
+etc/firmware/a225_pm4.fw
+etc/firmware/a300_pfp.fw
+etc/firmware/a300_pm4.fw
+etc/firmware/a330_pfp.fw
+etc/firmware/a330_pm4.fw
+etc/firmware/leia_pfp_470.fw
+etc/firmware/leia_pm4_470.fw
+
+# Camera firmware
+etc/firmware/cpp_firmware_v1_1_1.fw
+etc/firmware/cpp_firmware_v1_1_6.fw
+etc/firmware/cpp_firmware_v1_2_0.fw
+
+#sharp felica configs
+
+
+# LD_PRELOAD
+vendor/lib/libNimsWrap.so
+
+#bluetooth
+
+# Thermal
+bin/thermal-engine
+vendor/lib/libthermalclient.so
+#vendor/lib/libthermalioctl.so
+
+# Venus (media) firmware
+etc/firmware/venus.b00
+etc/firmware/venus.b01
+etc/firmware/venus.b02
+etc/firmware/venus.b03
+etc/firmware/venus.b04
+etc/firmware/venus.mbn
+etc/firmware/venus.mdt
+
+#wifi
+
+#rild cpmgrif
+
+#ims_rtp_daemon
+
+#port-bridge
+
+#qseecomd
+
+#camera chromatix
+
+#camera mm-qcamera-daemon
+
+#media
+
+#mm-pp-daemon
+
+#mm-jps-enc-test
+
+#mm-jpeg-dec-test-client
+
+#Power
+
+# Time services
+bin/time_daemon
+vendor/lib/libtime_genoff.so
+
+#SHARP_EXTEND SHDISP
+lib/libshdisp.so
+
+
+# DRM
+bin/qseecomd
+lib/libQSEEComAPI.so:vendor/lib/libQSEEComAPI.so
+vendor/lib/drm/libdrmwvmplugin.so
+vendor/lib/libdrmdiag.so
+vendor/lib/libdrmfs.so
+vendor/lib/libdrmtime.so
+vendor/lib/librpmb.so
+vendor/lib/libprdrmdecrypt.so
+vendor/lib/libssd.so
+vendor/lib/libStDrvInt.so
+vendor/lib/libtzdrmgenprov.so
+vendor/lib/libtzplayready.so
+
+# Perf
+bin/mpdecision
+vendor/lib/libqc-opt.so
+
+# Postprocessing
+bin/mm-pp-daemon
+vendor/lib/libmm-abl.so
+vendor/lib/libmm-abl-oem.so
+
+
+# Qualcomm framework
+bin/irsc_util
+vendor/lib/libdiag.so
+vendor/lib/libdsi_netctrl.so
+vendor/lib/libdsnetutils.so
+vendor/lib/libdsutils.so
+vendor/lib/libidl.so
+vendor/lib/libqcci_legacy.so
+vendor/lib/libqdi.so
+vendor/lib/libqdp.so
+vendor/lib/libqmi.so
+vendor/lib/libqmi_cci.so
+vendor/lib/libqmi_client_qmux.so
+vendor/lib/libqmi_common_so.so
+vendor/lib/libqmi_csi.so
+vendor/lib/libqmi_csvt_srvc.so
+vendor/lib/libqmi_encdec.so
+vendor/lib/libqmiservices.so
+
