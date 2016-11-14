@@ -6,11 +6,11 @@ DEVICE_PACKAGE_OVERLAYS += device/sharp/PA23/overlay
 
 include $(call all-subdir-makefiles)
 
-LOCAL_KERNEL := $(LOCAL_PATH)/kernel
+#LOCAL_KERNEL := $(LOCAL_PATH)/kernel
 #LOCAL_DT := $(LOCAL_PATH)/dt.img
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_KERNEL):kernel
+#PRODUCT_COPY_FILES += \
+#    $(LOCAL_KERNEL):kernel
 #	$(LOCAL_DT):dt.img
 
 PRODUCT_COPY_FILES += \
@@ -50,3 +50,5 @@ PRODUCT_BRAND := SHARP
 PRODUCT_MANUFACTURER := SHARP
 PRODUCT_MODEL := PA23
 
+# call the proprietary setup
+$(call inherit-product, vendor/sharp/PA23/pa23-vendor.mk)
