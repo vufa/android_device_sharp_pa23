@@ -1,1 +1,3 @@
-Only tested with OMINIROM branch 5.1.
+#device_sharp_pa23
+
+Config files for SHARP SBM303SH(PA23).
