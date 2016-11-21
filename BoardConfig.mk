@@ -75,4 +75,4 @@ BOARD_SEPOLICY_DIRS += \
         $(LOCAL_PATH)/sepolicy
 
 # Hack for building without kernel sources
-$(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
+#$(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
