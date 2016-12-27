@@ -1,22 +1,141 @@
+TARGET_USES_QCOM_BSP := true
+TARGET_USES_QCA_NFC := other
 
-# Inherit common
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-$(call inherit-product, build/target/product/full.mk)
+ifeq ($(TARGET_USES_QCOM_BSP), true)
+# Add QC Video Enhancements flag
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+endif #TARGET_USES_QCOM_BSP
 
-# Inherit vendor
-$(call inherit-product-if-exists, vendor/sharp/PA23/PA23-vendor.mk)
+#TARGET_DISABLE_DASH := true
+#TARGET_DISABLE_OMX_SECURE_TEST_APP := true
 
-DEVICE_PACKAGE_OVERLAYS += $(DEVICE_PATH)/overlay
+# media_profiles and media_codecs xmls for 8974
+ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
+PRODUCT_COPY_FILES += device/sharp/PA23/media/media_profiles_8974.xml:system/etc/media_profiles.xml \
+                      device/sharp/PA23/media/media_codecs_8974.xml:system/etc/media_codecs.xml \
+                      device/sharp/PA23/media/media_codecs_performance_8974.xml:system/etc/media_codecs_performance.xml
+endif  #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
-PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+PRODUCT_PROPERTY_OVERRIDES += \
+       dalvik.vm.heapminfree=2m
+$(call inherit-product, device/sharp/PA23/device.mk)
 
-# Inherit from msm8974
-$(call inherit-product, device/qcom/msm8974/msm8974.mk)
-
-## Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := PA23
 PRODUCT_NAME := PA23
-PRODUCT_BRAND := SHARP
-PRODUCT_MODEL := PA23
-PRODUCT_MANUFACTURER := SHARP
+PRODUCT_DEVICE := PA23
 
+# Audio configuration file
+PRODUCT_COPY_FILES += \
+    device/sharp/PA23/audio_policy.conf:system/etc/audio_policy.conf \
+    device/sharp/PA23/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    device/sharp/PA23/mixer_paths.xml:system/etc/mixer_paths.xml \
+    device/sharp/PA23/mixer_paths_auxpcm.xml:system/etc/mixer_paths_auxpcm.xml
+
+PRODUCT_PACKAGES += \
+    libqcomvisualizer \
+    libqcomvoiceprocessing \
+    libqcompostprocbundle
+
+# Feature definition files for 8974
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
+    frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
+    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:system/etc/permissions/android.hardware.sensor.barometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:system/etc/permissions/android.hardware.sensor.stepcounter.xml \
+    frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:system/etc/permissions/android.hardware.sensor.stepdetector.xml
+
+#battery_monitor
+PRODUCT_PACKAGES += \
+    battery_monitor \
+    battery_shutdown
+
+#fstab.qcom
+PRODUCT_PACKAGES += fstab.qcom
+
+#wlan driver
+PRODUCT_COPY_FILES += \
+    device/sharp/PA23/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    device/sharp/PA23/WCNSS_qcom_wlan_nv.bin:persist/WCNSS_qcom_wlan_nv.bin
+
+PRODUCT_PACKAGES += \
+    wpa_supplicant_overlay.conf \
+    p2p_supplicant_overlay.conf
+
+PRODUCT_PACKAGES += wcnss_service
+
+# MIDI feature
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml
+
+#ANT stack
+PRODUCT_PACKAGES += \
+        AntHalService \
+        libantradio \
+        ANTRadioService \
+        antradio_app
+
+# Enable strict operation
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.strict_op_enable=false
+
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.whitelist=/system/etc/whitelist_appops.xml
+
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    camera2.portability.force_api=1
+
+PRODUCT_COPY_FILES += \
+    device/sharp/PA23/whitelist_appops.xml:system/etc/whitelist_appops.xml
+
+# NFC packages
+ifeq ($(TARGET_USES_QCA_NFC),true)
+NFC_D := true
+
+ifeq ($(NFC_D), true)
+    PRODUCT_PACKAGES += \
+        libnfcD-nci \
+        libnfcD_nci_jni \
+        nfc_nci.msm8974 \
+        NfcDNci \
+        Tag \
+        com.android.nfc_extras \
+        com.android.nfc.helper
+else
+PRODUCT_PACKAGES += \
+    libnfc-nci \
+    libnfc_nci_jni \
+    nfc_nci.msm8974 \
+    NfcNci \
+    Tag \
+    com.android.nfc_extras
+endif
+
+# file that declares the MIFARE NFC constant
+# Commands to migrate prefs from com.android.nfc3 to com.android.nfc
+# NFC access control + feature files + configuration
+PRODUCT_COPY_FILES += \
+        frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
+        frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
+        frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml
+# Enable NFC Forum testing by temporarily changing the PRODUCT_BOOT_JARS
+# line has to be in sync with build/target/product/core_base.mk
+endif
+
+#PRODUCT_BOOT_JARS += org.codeaurora.Performance \
+                     vcard \
+
+PRODUCT_BOOT_JARS += tcmiface
+PRODUCT_BOOT_JARS += qcmediaplayer
+
+ifneq ($(strip $(QCPATH)),)
+PRODUCT_BOOT_JARS += WfdCommon
+PRODUCT_BOOT_JARS += qcom.fmradio
+#PRODUCT_BOOT_JARS += security-bridge
+#PRODUCT_BOOT_JARS += qsb-port
+PRODUCT_BOOT_JARS += oem-services
+PRODUCT_BOOT_JARS += com.qti.dpmframework
+PRODUCT_BOOT_JARS += dpmapi
+PRODUCT_BOOT_JARS += com.qti.location.sdk
+endif

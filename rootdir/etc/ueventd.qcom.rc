@@ -38,11 +38,16 @@
 /dev/smd0                 0660   system     system
 /dev/smd4                 0660   system     system
 /dev/smd_cxm_qmi          0640   radio      radio
-# SHARP_EXTEND ANT+ Del start
+# SHARP_EXTEND ANT Driver Del 2013.7.31 Start
 #/dev/smd5                 0660   system     system
 #/dev/smd6                 0660   system     system
-# SHARP_EXTEND ANT+ Del end
-/dev/smd7                 0660   bluetooth  bluetooth
+# SHARP_EXTEND ANT Driver Del 2013.7.31 End
+# SHARP_EXTEND 2013.07.05 for FEATURE_DCM_BR_066_BT_DUN Start
+# SHARP_EXTEND 2013.07.30 for FEATURE_SH_B_038_DUN_START_CONTROL Start
+#/dev/smd7                 0660   bluetooth  bluetooth
+/dev/smd7                 0660   system     system
+# SHARP_EXTEND 2013.07.30 for FEATURE_SH_B_038_DUN_START_CONTROL End
+# SHARP_EXTEND 2013.07.05 for FEATURE_DCM_BR_066_BT_DUN End
 
 #permissions for CSVT
 /dev/smd11                0660   radio      radio
@@ -98,11 +103,13 @@
 /dev/media*               0660   system     camera
 /dev/v4l-subdev*          0660   system     camera
 /dev/qseecom              0660   system     drmrpc
+/dev/pft                  0660   system     drmrpc
 /dev/gemini0              0660   system     camera
 /dev/jpeg0                0660   system     camera
 /dev/jpeg1                0660   system     camera
 /dev/jpeg2                0660   system     camera
 /dev/adsprpc-smd          0664   system     system
+/dev/system_health_monitor 0644  radio      system
 /dev/msm_camera/*         0660   system     camera
 /dev/gemini/              0660   system     camera
 /dev/mercury0             0660   system     camera
@@ -138,19 +145,25 @@
 /dev/msm_preproc_ctl      0660   system     audio
 /dev/msm_rtac             0660   system     audio
 /dev/msm_voicememo        0660   system     audio
+*/
 /dev/radio0               0640   fm_radio   fm_radio
 /dev/smd3                 0660   bluetooth  net_bt_stack
 /dev/smd2                 0660   bluetooth  net_bt_stack
-/dev/ttyHSL1              0660   system     system
+# SHARP_EXTEND FeliCa Driver Del 2013.7.2 Start
+#/dev/ttyHSL1              0660   system     system
+# SHARP_EXTEND FeliCa Driver Del 2013.7.2 End
 /dev/mdm                  0660   system     radio
 /sys/devices/virtual/smdpkt/smdcntl*       open_timeout   0664 radio radio
 /dev/sdio_tty_ciq_00      0660   system     system
 /dev/tty_sdio_00          0660   system     system
 /dev/ttyGS0               0660   system     system
 /dev/i2c-5                0660   media       media
+/dev/voice_svc            0660   system     audio
 
 # DVB devices
-/dev/dvb/adapter0/demux*  0440   media       media
+# SHARP_EXTEND Fullseg Mod 2013.07.12 Start
+/dev/dvb/adapter0/demux*  0664   media       media
+# SHARP_EXTEND Fullseg Mod 2013.07.12 End
 /dev/dvb/adapter0/dvr*    0660   media       media
 /dev/dvb/adapter0/video*  0660   media       media
 
@@ -174,8 +187,12 @@
 /dev/wcnss_ctrl           0660   system     system
 #nfc permissions
 /dev/nfc-nci              0660    nfc         nfc
+/dev/assd                 0660    nfc         nfc
 
 # UIO devices
 /dev/uio0                 0660   system     system
 /dev/uio1                 0660   system     system
 /dev/uio2                 0660   system     system
+
+# Add device block for FRP
+/dev/block/platform/msm_sdcc\.1/by-name/config    0660   system     system
