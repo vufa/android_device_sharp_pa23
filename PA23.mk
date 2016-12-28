@@ -59,6 +59,10 @@ PRODUCT_COPY_FILES += \
     device/sharp/PA23/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
     device/sharp/PA23/WCNSS_qcom_wlan_nv.bin:persist/WCNSS_qcom_wlan_nv.bin
 
+#
+PRODUCT_COPY_FILES += \
+   device/sharp/PA23/rootdir/sbin/chargeonlymode:sbin/chargeonlymode
+
 PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
     p2p_supplicant_overlay.conf
