@@ -21,7 +21,7 @@ TARGET_HAS_QC_KERNEL_SOURCE := true
 #TODO: Fix-me: Setting TARGET_HAVE_HDMI_OUT to false
 # to get rid of compilation error.
 TARGET_HAVE_HDMI_OUT := false
-TARGET_USES_OVERLAY := true
+TARGET_USES_OVERLAY := false
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_NO_BOOTLOADER         := true
 TARGET_NO_RADIOIMAGE         := true

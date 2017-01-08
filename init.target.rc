@@ -29,7 +29,10 @@
 
 on early-init
     mkdir /firmware 0771 system system
-    symlink /data/tombstones /tombstones
+
+#Sharp tombstones was emmc paritition
+#   symlink /data/tombstones /tombstones
+   mkdir /tombstones 0771 system system
 
 on init
     # Set the property to indicate type of virtual display to 0
@@ -54,6 +57,8 @@ on fs
      mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache nosuid nodev barrier=1
 #    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache noatime nosuid nodev barrier=1,noauto_da_alloc
 # SHARP_EXTEND filesystem 2013/06/13 emmc mount end
+    wait /dev/block/platform/msm_sdcc.1/by-name/tombstones
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/tombstones /tombstones nosuid nodev barrier=1
 
     wait /dev/block/platform/msm_sdcc.1/by-name/persist
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persist /persist nosuid nodev barrier=1

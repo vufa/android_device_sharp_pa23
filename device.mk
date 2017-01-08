@@ -3,7 +3,7 @@
 QCOM_BOARD_PLATFORMS += msm8974
 QSD8K_BOARD_PLATFORMS := qsd8k
 
-TARGET_USE_VENDOR_CAMERA_EXT := true
+TARGET_USE_VENDOR_CAMERA_EXT := false
 
 ANDROID_COMPILE_WITH_JACK := false
 
@@ -165,6 +165,7 @@ INIT += init.qcom.usb.sh
 INIT += usf_post_boot.sh
 INIT += init.qcom.efs.sync.sh
 INIT += ueventd.qcom.rc
+INIT += ueventd.rc
 INIT += init.ath3k.bt.sh
 INIT += init.qcom.audio.sh
 INIT += init.qcom.ssr.sh
@@ -258,7 +259,7 @@ LIBQDUTILS := libqdutils
 LIBQDMETADATA := libqdMetaData
 
 #LIBPOWER
-LIBPOWER := power.qcom
+#LIBPOWER := power.qcom
 
 #LLVM for RenderScript
 #use qcom LLVM

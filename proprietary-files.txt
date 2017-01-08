@@ -1,1 +1,4 @@
 #Still debug
+vendor/lib/libqti-perfd-client.so
+bin/rmt_storage
+bin/port-bridge
