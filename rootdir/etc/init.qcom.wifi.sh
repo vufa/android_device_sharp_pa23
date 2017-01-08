@@ -97,14 +97,12 @@ case "$target" in
     if [ -e /sys/bus/platform/drivers/msm_hsic_host ]; then
        if [ ! -L /sys/bus/usb/devices/1-1 ]; then
            echo msm_hsic_host > /sys/bus/platform/drivers/msm_hsic_host/unbind
-       else
-           echo auto > /sys/bus/usb/devices/1-1/power/control
        fi
 
-       chown system.system /sys/bus/platform/drivers/msm_hsic_host/bind
-       chown system.system /sys/bus/platform/drivers/msm_hsic_host/unbind
-       chmod 0200 /sys/bus/platform/drivers/msm_hsic_host/bind
-       chmod 0200 /sys/bus/platform/drivers/msm_hsic_host/unbind
+       chown -h system.system /sys/bus/platform/drivers/msm_hsic_host/bind
+       chown -h system.system /sys/bus/platform/drivers/msm_hsic_host/unbind
+       chmod -h 0200 /sys/bus/platform/drivers/msm_hsic_host/bind
+       chmod -h 0200 /sys/bus/platform/drivers/msm_hsic_host/unbind
     fi
 
     wlanchip=""
@@ -131,7 +129,7 @@ case "$target" in
                 for device in $sdio_devices; do
                     if [ $ven_idx -eq $dev_idx ]; then
                         case "$device" in
-                        "0x0400" | "0x0401")
+                        "0x0400" | "0x0401" | "0x0402")
                             wlanchip="AR6004-SDIO"
                             ;;
                         *)

@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2012, The Linux Foundation. All rights reserved.
+# Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -29,13 +29,26 @@
 export PATH=/system/bin
 
 # Set platform variables
-soc_hwplatform=`cat /sys/devices/system/soc/soc0/hw_platform` 2> /dev/null
-soc_hwid=`cat /sys/devices/system/soc/soc0/id` 2> /dev/null
-soc_hwver=`cat /sys/devices/system/soc/soc0/platform_version` 2> /dev/null
+if [ -f /sys/devices/soc0/hw_platform ]; then
+    soc_hwplatform=`cat /sys/devices/soc0/hw_platform` 2> /dev/null
+else
+    soc_hwplatform=`cat /sys/devices/system/soc/soc0/hw_platform` 2> /dev/null
+fi
+if [ -f /sys/devices/soc0/soc_id ]; then
+    soc_hwid=`cat /sys/devices/soc0/soc_id` 2> /dev/null
+else
+    soc_hwid=`cat /sys/devices/system/soc/soc0/id` 2> /dev/null
+fi
+if [ -f /sys/devices/soc0/platform_version ]; then
+    soc_hwver=`cat /sys/devices/soc0/platform_version` 2> /dev/null
+else
+    soc_hwver=`cat /sys/devices/system/soc/soc0/platform_version` 2> /dev/null
+fi
 
-log -t BOOT -p i "MSM target '$1', SoC '$soc_hwplatform', HwID '$soc_hwid', SoC ver '$soc_hwver'"
+platform=`getprop ro.board.platform`
+log -t BOOT -p i "MSM target '$platform', SoC '$soc_hwplatform', HwID '$soc_hwid', SoC ver '$soc_hwver'"
 
-case "$1" in
+case "$platform" in
     "msm7630_surf" | "msm7630_1x" | "msm7630_fusion")
         case "$soc_hwplatform" in
             "FFA" | "SVLTE_FFA")
@@ -111,6 +124,9 @@ case "$1" in
                 # Android sw navigation bar
                 setprop ro.hw.nav_keys 0
                 ;;
+            "Dragon")
+                setprop ro.sf.lcd_density 240
+                ;;
             *)
                 setprop ro.sf.lcd_density 320
                 ;;
@@ -125,40 +141,71 @@ case "$1" in
         esac
         ;;
 
-    "msm8610" | "apq8084")
+    "msm8610")
         case "$soc_hwplatform" in
             *)
                 setprop ro.sf.lcd_density 240
                 ;;
         esac
         ;;
+    "apq8084")
+        case "$soc_hwplatform" in
+            "Liquid")
+                setprop ro.sf.lcd_density 293
+                # Liquid do not have hardware navigation keys, so enable
+                # Android sw navigation bar
+                setprop ro.hw.nav_keys 0
+                ;;
+            *)
+                setprop ro.sf.lcd_density 440
+                ;;
+        esac
+        ;;
 esac
 
-# Setup HDMI related nodes & permissions
+# Setup display nodes & permissions
 # HDMI can be fb1 or fb2
 # Loop through the sysfs nodes and determine
 # the HDMI(dtv panel)
-for file in /sys/class/graphics/fb*
+
+function set_perms() {
+    #Usage set_perms <filename> <ownership> <permission>
+    chown -h $2 $1
+    chmod $3 $1
+}
+
+for fb_cnt in 0 1 2
 do
+file=/sys/class/graphics/fb$fb_cnt
+dev_file=/dev/graphics/fb$fb_cnt
+  if [ -d "$file" ]
+  then
     value=`cat $file/msm_fb_type`
     case "$value" in
             "dtv panel")
-        chown system.graphics $file/hpd
-        chown system.graphics $file/vendor_name
-        chown system.graphics $file/product_description
-        chmod 0664 $file/hpd
-        chmod 0664 $file/vendor_name
-        chmod 0664 $file/product_description
-        chmod 0664 $file/video_mode
-        chmod 0664 $file/format_3d
-        # create symbolic link
-        ln -s $file /dev/graphics/hdmi
-        # Change owner and group for media server and surface flinger
-        chown system.system $file/format_3d;;
+        set_perms $file/hpd system.graphics 0664
+        set_perms $file/res_info system.graphics 0664
+        set_perms $file/vendor_name system.graphics 0664
+        set_perms $file/product_description system.graphics 0664
+        set_perms $file/video_mode system.graphics 0664
+        set_perms $file/format_3d system.graphics 0664
+        set_perms $file/s3d_mode system.graphics 0664
+        set_perms $file/cec/enable system.graphics 0664
+        set_perms $file/cec/logical_addr system.graphics 0664
+        set_perms $file/cec/rd_msg system.graphics 0664
+        set_perms $file/pa system.graphics 0664
+        set_perms $file/cec/wr_msg system.graphics 0600
+        set_perms $file/hdcp/tp system.graphics 0664
+        ln -s $dev_file /dev/graphics/hdmi
     esac
+    if [ $fb_cnt -eq 0 ]
+    then
+        set_perms $file/idle_time system.graphics 0664
+        set_perms $file/dynamic_fps system.graphics 0664
+        set_perms $file/dyn_pu system.graphics 0664
+        set_perms $file/modes system.graphics 0664
+        set_perms $file/mode system.graphics 0664
+    fi
+  fi
 done
-
-# Set date to a time after 2008
-# This is a workaround for Zygote to preload time related classes properly
-date -s 20090102.130000
 

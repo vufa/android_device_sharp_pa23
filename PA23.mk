@@ -36,6 +36,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/calib.cfg:system/etc/calib.cfg \
     $(LOCAL_PATH)/rootdir/etc/modem/Diag.cfg:system/etc/modem/Diag.cfg
 
+#chargeonlymode
+PRODUCT_COPY_FILES += \
+   device/sharp/PA23/rootdir/sbin/chargeonlymode:sbin/chargeonlymode
+
 # Screen density
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi xxhdpi xxxhdpi
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
@@ -51,4 +55,4 @@ PRODUCT_MANUFACTURER := SHARP
 PRODUCT_MODEL := PA23
 
 # call the proprietary setup
-$(call inherit-product, vendor/sharp/PA23/pa23-vendor.mk)
+$(call inherit-product, vendor/sharp/PA23/PA23-vendor.mk)
