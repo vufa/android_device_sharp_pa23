@@ -2,9 +2,10 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 LOCAL_PATH := device/sharp/PA23
 
-#DEVICE_PACKAGE_OVERLAYS += device/sharp/PA23/overlay
-
-$(call inherit-product, device/sharp/PA23/device.mk)
+# enable overlays to use our version of
+# source/resources etc.
+DEVICE_PACKAGE_OVERLAYS += device/sharp/PA23/device/overlay
+PRODUCT_PACKAGE_OVERLAYS += device/sharp/PA23/product/overlay
 
 include $(call all-subdir-makefiles)
 
