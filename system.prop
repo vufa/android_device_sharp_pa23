@@ -17,7 +17,8 @@ ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
 # Start in global mode
 ro.telephony.default_network=10
-
+qemu.hw.mainkeys=0
+ro.sf.lcd_density=440
 debug.sf.hw=1
 debug.egl.hw=1
 debug.composition.type=c2d
