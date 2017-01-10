@@ -2,19 +2,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 LOCAL_PATH := device/sharp/PA23
 
-# enable overlays to use our version of
-# source/resources etc.
-DEVICE_PACKAGE_OVERLAYS += device/sharp/PA23/device/overlay
-PRODUCT_PACKAGE_OVERLAYS += device/sharp/PA23/product/overlay
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 include $(call all-subdir-makefiles)
-
-#LOCAL_KERNEL := $(LOCAL_PATH)/kernel
-#LOCAL_DT := $(LOCAL_PATH)/dt.img
-
-#PRODUCT_COPY_FILES += \
-#    $(LOCAL_KERNEL):kernel
-#	$(LOCAL_DT):dt.img
 
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/recovery/root/ueventd.qcom.rc:root/ueventd.qcom.rc \
