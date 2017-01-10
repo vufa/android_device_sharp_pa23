@@ -430,7 +430,6 @@ PRODUCT_PACKAGES := \
     Settings \
     Sync \
     SystemUI \
-    Updater \
     CalendarProvider \
     SyncProvider \
     IM \
@@ -500,7 +499,6 @@ PRODUCT_PACKAGES += $(STK)
 PRODUCT_PACKAGES += $(STMLOG)
 PRODUCT_PACKAGES += $(TSLIB_EXTERNAL)
 PRODUCT_PACKAGES += $(QRGND)
-PRODUCT_PACKAGES += $(UPDATER)
 PRODUCT_PACKAGES += $(WPA)
 PRODUCT_PACKAGES += $(ZLIB)
 PRODUCT_PACKAGES += $(VT_JNI)
@@ -523,9 +521,6 @@ PRODUCT_PACKAGES += \
 
 # Flatland
 PRODUCT_PACKAGES += flatland
-
-# MSM updater library
-PRODUCT_PACKAGES += librecovery_updater_msm
 
 # vcard jar
 PRODUCT_PACKAGES += vcard
