@@ -54,10 +54,11 @@ PRODUCT_PACKAGES += \
 #fstab.qcom
 PRODUCT_PACKAGES += fstab.qcom
 
-#wlan driver
+# WiFi
 PRODUCT_COPY_FILES += \
     device/sharp/PA23/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
-    device/sharp/PA23/WCNSS_qcom_wlan_nv.bin:persist/WCNSS_qcom_wlan_nv.bin
+    device/sharp/PA23/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin \
+    device/sharp/PA23/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat
 
 #
 PRODUCT_COPY_FILES += \

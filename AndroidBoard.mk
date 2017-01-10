@@ -120,12 +120,13 @@ LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := $(LOCAL_MODULE)
 include $(BUILD_PREBUILT)
 
+#copy wifi firmware
 #Create symbolic links
-$(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/prima; \
-	ln -sf /persist/WCNSS_qcom_wlan_nv.bin \
-	$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin; \
-	ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
-	$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
+#$(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/prima; \
+#	ln -sf /persist/WCNSS_qcom_wlan_nv.bin \
+#	$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin; \
+#	ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
+#	$(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
 
 endif
 
