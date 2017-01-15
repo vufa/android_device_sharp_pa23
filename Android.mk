@@ -1,3 +1,4 @@
+
 #
 # This empty Android.mk file exists to prevent the build system from
 # automatically including any other Android.mk files under this directory.
@@ -20,10 +21,4 @@ $(WCNSS_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 	$(hide) ln -sf /firmware/image/$(notdir $@) $@
 
 ALL_DEFAULT_INSTALLED_MODULES += $(WCNSS_SYMLINKS)
-
-# Create a link for the WCNSS config file, which ends up as a writable
-# version in /data/misc/wifi
-$(shell mkdir -p $(TARGET_OUT)/etc/firmware/wlan/prima; \
-    ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
-	    $(TARGET_OUT)/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
 
