@@ -33,6 +33,12 @@ PRODUCT_PACKAGES += \
     qca6234-service.sh \
     usf_post_boot.sh
 
+#keylayout
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+    $(LOCAL_PATH)/keylayout/shtps_key.kl:system/usr/keylayout/shtps_key.kl \
+    $(LOCAL_PATH)/keylayout/shtps_rmi.kl:system/usr/keylayout/shtps_rmi.kl
+
 # Proprietery Firmware
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/xtwifi.conf:system/etc/xtwifi.conf \
