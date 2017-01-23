@@ -92,6 +92,9 @@ bluetooth.hfp.client=1
 #
 ro.bluetooth.alwaysbleon=true
 
+# SdcardFS
+ro.sys.sdcardfs=true
+
 #Simulate sdcard on /data/media
 #
 persist.fuse_sdcard=true
