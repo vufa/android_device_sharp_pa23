@@ -22,14 +22,11 @@
     <bool name="config_wifi_background_scan_support">true</bool>
     <bool name="config_wifi_batched_scan_supported">false</bool>
     <bool name="config_automatic_brightness_available">true</bool>
-    <bool name="config_unplugTurnsOnScreen">true</bool>
-    <bool name="config_disableMenuKeyInLockScreen">true</bool>
     <bool name="config_dreamsSupported">true</bool>
     <bool name="config_dreamsEnabledByDefault">false</bool>
-    <bool name="config_dreamsActivatedOnDockByDefault">true</bool>
     <bool name="config_useDevInputEventForAudioJack">true</bool>
     <bool name="config_hotswapCapable">true</bool>
-    <bool translatable="false" name="skip_restoring_network_selection">true</bool>
+    <bool name="skip_restoring_network_selection">true</bool>
     <bool name="config_cellBroadcastAppLinks">true</bool>
 
     <!-- The duration (in milliseconds) that the radio will scan for a signal
@@ -183,12 +180,6 @@
         <item>"ethernet,9,9,9,-1,true"</item>
     </string-array>
 
-    <!-- Enable overlay for all location components. -->
-    <!--bool name="config_enableNetworkLocationOverlay" translatable="false">false</bool>
-    <string name="config_networkLocationProviderPackageName" translatable="false">com.qualcomm.location</string>
-    <bool name="config_enableFusedLocationOverlay" translatable="false">false</bool>
-    <string name="config_fusedLocationProviderPackageName" translatable="false">com.qualcomm.location</string-->
-
     <!-- This string array should be overridden by the device to present a list of radio
          attributes.  This is used by the connectivity manager to decide which networks can coexist
          based on the hardware -->
@@ -209,18 +200,8 @@
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">true</bool>
 
-    <!-- Does the notification LED support multiple colors?
-         Used to decide if the user can change the colors -->
-    <bool name="config_multiColorNotificationLed">true</bool>
-
-    <!-- Default LED on time for notification LED in milliseconds. -->
-    <integer name="config_defaultNotificationLedOn">1000</integer>
-
     <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveBatteryLed">true</bool>
-
-    <!-- Does the battery LED support multiple colors? Used to decide if the user can change the colors -->
-    <bool name="config_multiColorBatteryLed">true</bool>
 
     <!-- Make things go fast -->
     <bool name="config_ui_enableFadingMarquee">false</bool>
