@@ -1,10 +1,10 @@
 
 BOARD_VENDOR := pa23
 
-LOCAL_PATH := device/sharp/PA23
+LOCAL_PATH := device/sharp/pa23
 
 # inherit from the proprietary version
--include vendor/sharp/PA23/BoardConfigVendor.mk
+-include vendor/sharp/pa23/BoardConfigVendor.mk
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8974

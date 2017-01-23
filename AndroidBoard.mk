@@ -7,8 +7,6 @@ ALL_PREBUILT += $(INSTALLED_KERNEL_TARGET)
 #----------------------------------------------------------------------
 # extra images
 #----------------------------------------------------------------------
-include build/core/generate_extra_images.mk
-
 # include the non-open-source counterpart to this file
--include vendor/sharp/PA23/AndroidBoardVendor.mk
+-include vendor/sharp/pa23/AndroidBoardVendor.mk
 

@@ -1,6 +1,6 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
-LOCAL_PATH := device/sharp/PA23
+LOCAL_PATH := device/sharp/pa23
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
@@ -106,4 +106,4 @@ $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
 
 # call the proprietary setup
-$(call inherit-product, vendor/sharp/PA23/PA23-vendor.mk)
+$(call inherit-product, vendor/sharp/pa23/pa23-vendor.mk)

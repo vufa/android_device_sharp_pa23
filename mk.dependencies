@@ -5,7 +5,7 @@
  },
  {
    "repository": "android_vendor_sharp_pa23",
-   "target_path": "vendor/sharp/PA23"
+   "target_path": "vendor/sharp/pa23"
  },
  {
    "repository": "android_kernel_sharp_msm8974",
