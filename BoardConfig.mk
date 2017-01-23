@@ -99,10 +99,10 @@ TW_NO_REBOOT_BOOTLOADER := true
 #TW_TARGET_USES_QCOM_BSP := true
 
 # MK Hardware
-BOARD_USES_MOKEE_HARDWARE = true
-BOARD_HARDWARE_CLASS += \
-    hardware/mokee/mkhw \
-    $(LOCAL_PATH)/mkhw
+#BOARD_USES_MOKEE_HARDWARE = true
+#BOARD_HARDWARE_CLASS += \
+#    hardware/mokee/mkhw \
+#    $(LOCAL_PATH)/mkhw
 
 # No old RPC for prop
 TARGET_NO_RPC := true
