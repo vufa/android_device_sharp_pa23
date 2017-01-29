@@ -29,8 +29,6 @@ TARGET_NO_RADIOIMAGE         := true
 TARGET_BOARD_PLATFORM     := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
 
-USE_CLANG_PLATFORM_BUILD := true
-
 # Architecture
 TARGET_ARCH         := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
@@ -60,9 +58,17 @@ BOARD_USES_QCOM_HARDWARE            := true
 TARGET_POWERHAL_VARIANT             := qcom
 
 
+# Graphics
+USE_OPENGL_RENDERER               := true
+TARGET_CONTINUOUS_SPLASH_ENABLED  := true
+TARGET_USES_C2D_COMPOSITION       := true
+TARGET_USE_COMPAT_GRALLOC_PERFORM := true
+TARGET_USES_ION                   := true
+OVERRIDE_RS_DRIVER                := libRSDriver_adreno.so
+NUM_FRAMEBUFFER_SURFACE_BUFFERS   := 3
 # Filesystem
-TARGET_BOOTIMG_SIGNED                := false
 TARGET_USERIMAGES_USE_EXT4           := true
+TARGET_USERIMAGES_USE_F2FS          := true
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE    := ext4
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE  := ext4
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE   := ext4
@@ -96,10 +102,10 @@ TW_NO_REBOOT_BOOTLOADER := true
 #TW_TARGET_USES_QCOM_BSP := true
 
 # MK Hardware
-#BOARD_USES_MOKEE_HARDWARE = true
-#BOARD_HARDWARE_CLASS += \
-#    hardware/mokee/mkhw \
-#    $(LOCAL_PATH)/mkhw
+BOARD_USES_MOKEE_HARDWARE = true
+BOARD_HARDWARE_CLASS += \
+    hardware/mokee/mkhw \
+    $(LOCAL_PATH)/mkhw
 
 # No old RPC for prop
 TARGET_NO_RPC := true

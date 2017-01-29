@@ -1,10 +1,9 @@
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+# Common QCOM configuration tools
+$(call inherit-product, device/qcom/common/Android.mk)
 
 LOCAL_PATH := device/sharp/pa23
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
-
-include $(call all-subdir-makefiles)
 
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/recovery/root/ueventd.qcom.rc:root/ueventd.qcom.rc \
@@ -39,11 +38,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/shtps_key.kl:system/usr/keylayout/shtps_key.kl \
     $(LOCAL_PATH)/keylayout/shtps_rmi.kl:system/usr/keylayout/shtps_rmi.kl
 
-# Proprietery Firmware
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/xtwifi.conf:system/etc/xtwifi.conf \
-    $(LOCAL_PATH)/rootdir/etc/calib.cfg:system/etc/calib.cfg \
-    $(LOCAL_PATH)/rootdir/etc/modem/Diag.cfg:system/etc/modem/Diag.cfg
 
 # Power
 PRODUCT_PACKAGES += \
@@ -52,11 +46,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/changepowermode.sh:system/bin/changepowermode.sh
 
-# Proprietery Firmware
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/xtwifi.conf:system/etc/xtwifi.conf \
-    $(LOCAL_PATH)/rootdir/etc/calib.cfg:system/etc/calib.cfg \
-    $(LOCAL_PATH)/rootdir/etc/modem/Diag.cfg:system/etc/modem/Diag.cfg
+# SoftAP
+PRODUCT_PACKAGES += \
+    libqsap_sdk \
+    libQWiFiSoftApCfg \
+    libwcnss_qmi \
+    wcnss_service
 
 # Media profile
 PRODUCT_COPY_FILES += \
@@ -66,6 +61,60 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
+
+# Media & Audio
+PRODUCT_PACKAGES += \
+    libc2dcolorconvert \
+    libdivxdrmdecrypt \
+    libOmxAacEnc \
+    libOmxAmrEnc \
+    libOmxCore \
+    libOmxEvrcEnc \
+    libOmxQcelp13Enc \
+    libOmxVdec \
+    libOmxVenc \
+    libstagefrighthw \
+
+PRODUCT_PACKAGES += \
+    audiod \
+    audio.a2dp.default \
+    audio_policy.msm8974 \
+    audio.primary.msm8974 \
+    audio.r_submix.default \
+    audio.usb.default \
+    libaudio-resampler \
+    libqcompostprocbundle \
+    libqcomvisualizer \
+    libqcomvoiceprocessing \
+    tinymix
+
+# Filesystem management tools
+PRODUCT_PACKAGES += \
+    make_ext4fs \
+    setup_fs \
+    mkntfs \
+    dumpe2fs \
+    resize2fs \
+    e2fsck_static \
+    mke2fs_static \
+    resize2fs_static
+
+# Graphics
+PRODUCT_PACKAGES += \
+    copybit.msm8974 \
+    gralloc.msm8974 \
+    hwcomposer.msm8974 \
+    memtrack.msm8974 \
+    liboverlay
+
+# Keystore
+PRODUCT_PACKAGES += \
+    keystore.msm8974
+
+# Gello
+PRODUCT_PACKAGES += \
+    Gello
+
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -113,3 +162,4 @@ $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk
 
 # call the proprietary setup
 $(call inherit-product, vendor/sharp/pa23/pa23-vendor.mk)
+$(call inherit-product, vendor/qcom/binaries/msm8974/graphics/graphics-vendor.mk)
