@@ -25,7 +25,6 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x02000000 -
 # Try to build the kernel
 TARGET_KERNEL_SOURCE := kernel/sharp/msm8974
 TARGET_KERNEL_CONFIG := pa23_defconfig
-KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin
 KERNEL_TOOLCHAIN_PREFIX := arm-linux-androideabi-
 
 # Filesystem
